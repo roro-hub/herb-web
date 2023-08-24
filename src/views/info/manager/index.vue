@@ -72,6 +72,9 @@
         <el-table-column label="联系方式" align="center">
           <template slot-scope="scope">{{ scope.row.phone }}</template>
         </el-table-column>
+        <el-table-column label="邮箱" align="center">
+          <template slot-scope="scope">{{ scope.row.email }}</template>
+        </el-table-column>
         <el-table-column label="头像" width="100" align="center">
           <template slot-scope="scope">
             <img style="height: 80px;width: 80px" :src="scope.row.image">
@@ -113,6 +116,7 @@
 </template>
 <script>
 import { fetchList, deleteManager } from "@/api/manager";
+
 const defaultListQuery = {
   pageNum: 1,
   pageSize: 10,

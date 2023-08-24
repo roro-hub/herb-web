@@ -36,16 +36,16 @@ export const constantRouterMap = [
 
 export const asyncRouterMap = [
   {
-    path:'/herb',
+    path:'/info',
     component: Layout,
-    redirect: '/herb/info',
+    redirect: '/info/bigscreen',
     name: 'info',
-    meta: {title: '中药市场管理', icon: 'order'},
+    meta: {title: '大屏配置管理', icon: 'order'},
     children: [
       {
         path: 'market',
         name: 'market',
-        component: () => import('@/views/info/market/index'),
+        component: () => import('@/views/info/bigscreen/index'),
         meta: {title: '市场信息', icon: 'product-list'}
       },
       {
@@ -68,19 +68,12 @@ export const asyncRouterMap = [
         meta: {title: '编辑管理员'},
         hidden: true
       },
-      // {
-      //   path: 'viewBlock',
-      //   name: 'viewBlock',
-      //   component: () => import('@/views/info/block/view'),
-      //   meta: {title: '基地环境'},
-      //   hidden: true
-      // },
-      // {
-      //   path: 'enterprise',
-      //   name: 'enterprise',
-      //   component: () => import('@/views/info/herb/index'),
-      //   meta: {title: '中药信息', icon: 'product-list'}
-      // }
+      {
+        path: 'herb',
+        name: 'herb',
+        component: () => import('@/views/info/herb/index'),
+        meta: {title: '中药信息', icon: 'product-list'}
+      }
     ]
   },
   {

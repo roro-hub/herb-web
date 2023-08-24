@@ -5,10 +5,13 @@
         <el-input v-model="managerDetail.name"></el-input>
       </el-form-item>
       <el-form-item label="联系方式：" prop="phone">
-        <el-input v-model="managerDetail.telephone"></el-input>
+        <el-input v-model="managerDetail.phone"></el-input>
       </el-form-item>
-      <el-form-item label="排序：">
-        <el-input v-model="managerDetail.sort"></el-input>
+      <el-form-item label="邮箱：">
+        <el-input v-model="managerDetail.email"></el-input>
+      </el-form-item>
+      <el-form-item label="管理员图片：">
+        <single-upload v-model="managerDetail.image"></single-upload>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit('managerForm')">提交</el-button>
@@ -20,15 +23,19 @@
 </template>
 
 <script>
-  import {fetchList,createManager,updateManager,deleteManager,getManagerDetail} from '@/api/manager'
+  import {fetchList,createManager,updateManager,deleteManager,getManagerDetail} from '@/api/manager';
+  import SingleUpload from "@/components/Upload/singleUpload";
 
   const defaultManagerDetail= {
+    id: 0,
     name: '',
-    description: '',
-    sort: 0,
+    phone: '',
+    email: '',
+    image: ''
   };
   export default {
     name: "ManagerDetail",
+    components: { SingleUpload },
     props: {
       isEdit: {
         type: Boolean,

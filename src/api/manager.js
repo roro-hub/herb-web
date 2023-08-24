@@ -15,9 +15,9 @@ export function createManager(data) {
   })
 }
 
-export function updateManager(id, data) {
+export function updateManager(data) {
   return request({
-    url:'/manager' + id,
+    url:'/manager',
     method:'put',
     data:data
   })
