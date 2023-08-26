@@ -105,7 +105,7 @@
                 }
               }
               if (this.isEdit) {
-                updateHerb(this.$route.query.id, this.herbDetail).then(response => {
+                updateHerb(this.herbDetail).then(response => {
                   this.$message({
                     message: '修改成功',
                     type: 'success',

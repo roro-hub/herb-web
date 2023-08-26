@@ -77,7 +77,7 @@
               type: 'warning'
             }).then(() => {
               if (this.isEdit) {
-                updateManager(this.$route.query.id, this.managerDetail).then(response => {
+                updateManager(this.managerDetail).then(response => {
                   this.$message({
                     message: '修改成功',
                     type: 'success',

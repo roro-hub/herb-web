@@ -1,11 +1,11 @@
 <template> 
-  <herb-detail :is-edit='true'></herb-detail>
+  <processing-detail :is-edit='true'></processing-detail>
 </template>
 <script>
-  import HerbDetail from './components/HerbDetail'
+  import ProcessingDetail from './components/ProcessingDetail'
   export default {
-    name: 'updateHerb',
-    components: { HerbDetail }
+    name: 'updateProcessing',
+    components: { ProcessingDetail }
   }
 </script>
 <style>

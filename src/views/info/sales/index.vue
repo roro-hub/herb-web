@@ -28,12 +28,16 @@
           size="small"
           label-width="140px"
         >
-          <el-form-item label="药材名称：">
-            <el-input
-              v-model="listQuery.name"
-              class="input-width"
-              placeholder="药材名称"
-            ></el-input>
+        <el-form-item label="药材名称：" prop="herb">
+            <el-select v-model="listQuery.herbId" placeholder="请选择药材">
+              <el-option
+                v-for="item in selectHerbList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              >
+              </el-option>
+            </el-select>
           </el-form-item>
         </el-form>
       </div>
@@ -111,11 +115,16 @@
 </template>
 <script>
 import { fetchList, deleteSales } from "@/api/sales";
+import { fetchHerbList } from "@/api/herb";
 
 const defaultListQuery = {
   pageNum: 1,
   pageSize: 10,
   name: null,
+  herbId: null,
+  recordMonth: null,
+  quantity: null,
+  type: 'sales'
 };
 export default {
   name: "infoSalesList",
@@ -127,14 +136,21 @@ export default {
       list: null,
       total: null,
       showUpperLevel: false,
+      selectHerbList: []
     };
   },
   created() {
     this.showUpperLevel = this.$route.query.showUpperLevel == 1 ? true : false;
     this.getList();
+    this.getSelectHerbList();
   },
   filters: {},
   methods: {
+    getSelectHerbList() {
+      fetchHerbList({ pageSize: 1000, pageNum: 1 }).then((response) => {
+        this.selectHerbList = response.data.list;
+      });
+    },
     handleResetSearch() {
       this.listQuery = Object.assign({}, defaultListQuery);
     },

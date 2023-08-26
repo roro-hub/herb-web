@@ -62,7 +62,7 @@
               type: 'warning'
             }).then(() => {
               if (this.isEdit) {
-                updateHerbType(this.$route.query.id, this.herbTypeDetail).then(response => {
+                updateHerbType(this.herbTypeDetail).then(response => {
                   this.$message({
                     message: '修改成功',
                     type: 'success',

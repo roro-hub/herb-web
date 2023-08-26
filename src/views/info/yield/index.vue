@@ -28,12 +28,16 @@
           size="small"
           label-width="140px"
         >
-          <el-form-item label="名称：">
-            <el-input
-              v-model="listQuery.name"
-              class="input-width"
-              placeholder="药材名称"
-            ></el-input>
+        <el-form-item label="药材名称：" prop="herb">
+            <el-select v-model="listQuery.herbId" placeholder="请选择药材">
+              <el-option
+                v-for="item in selectHerbList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              >
+              </el-option>
+            </el-select>
           </el-form-item>
         </el-form>
       </div>
@@ -51,7 +55,7 @@
       </el-button>
       <el-button
         class="btn-add"
-        @click="handleAddHerb()"
+        @click="handleAddYield()"
         size="mini"
       >
         添加
@@ -66,32 +70,27 @@
         border
       >
         <!-- <el-table-column type="selection" width="60" align="center"></el-table-column> -->
-        <el-table-column label="名称" width="160" align="center">
+        <el-table-column label="药材名称" width="160" align="center">
           <template slot-scope="scope">{{ scope.row.name }}</template>
         </el-table-column>
-        <el-table-column label="类型" align="center">
-          <template slot-scope="scope">{{ scope.row.herbType }}</template>
+        <el-table-column label="销量" align="center">
+          <template slot-scope="scope">{{ scope.row.quantity }}</template>
         </el-table-column>
-        <el-table-column label="内容" align="center">
-          <template slot-scope="scope">{{ scope.row.content }}</template>
-        </el-table-column>
-        <el-table-column label="图片" width="100" align="center">
-          <template slot-scope="scope">
-            <img style="height: 80px;width: 80px" :src="scope.row.images">
-          </template>
+        <el-table-column label="日期" align="center">
+          <template slot-scope="scope">{{ scope.row.recordMonth }}</template>
         </el-table-column>
         <el-table-column label="操作" width="160" align="center">
           <template slot-scope="scope">
-            <p>
+            <p v-if="scope.row.name != '管理员'">
               <el-button
                 size="mini"
-                @click="handleUpdateHerb(scope.$index, scope.row)"
+                @click="handleUpdateYield(scope.$index, scope.row)"
                 >编辑
               </el-button>
               <el-button
                 size="mini"
                 type="danger"
-                @click="handleDeleteHerb(scope.$index, scope.row)"
+                @click="handleDeleteYield(scope.$index, scope.row)"
                 >删除
               </el-button>
             </p>
@@ -115,15 +114,20 @@
   </div>
 </template>
 <script>
-import { fetchList, deleteHerb } from "@/api/herb";
+import { fetchList, deleteYield } from "@/api/yield";
+import { fetchHerbList } from "@/api/herb";
 
 const defaultListQuery = {
   pageNum: 1,
   pageSize: 10,
   name: null,
+  herbId: null,
+  recordMonth: null,
+  quantity: null,
+  type: 'yield'
 };
 export default {
-  name: "infoHerbList",
+  name: "infoYieldList",
   components: {},
   data() {
     return {
@@ -132,14 +136,21 @@ export default {
       list: null,
       total: null,
       showUpperLevel: false,
+      selectHerbList: []
     };
   },
   created() {
     this.showUpperLevel = this.$route.query.showUpperLevel == 1 ? true : false;
     this.getList();
+    this.getSelectHerbList();
   },
   filters: {},
   methods: {
+    getSelectHerbList() {
+      fetchHerbList({ pageSize: 1000, pageNum: 1 }).then((response) => {
+        this.selectHerbList = response.data.list;
+      });
+    },
     handleResetSearch() {
       this.listQuery = Object.assign({}, defaultListQuery);
     },
@@ -147,8 +158,8 @@ export default {
       this.listQuery.pageNum = 1;
       this.getList();
     },
-    handleAddHerb() {
-      this.$router.push({ path: "/info/addHerb" });
+    handleAddYield() {
+      this.$router.push({ path: "/info/addYield" });
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
@@ -173,19 +184,19 @@ export default {
     handleShowUpperLevel() {
       this.$router.back();
     },
-    handleUpdateHerb(index, row) {
+    handleUpdateYield(index, row) {
       this.$router.push({
-        path: "/info/updateHerb",
+        path: "/info/updateYield",
         query: { id: row.id },
       });
     },
-    handleDeleteHerb(index, row) {
+    handleDeleteYield(index, row) {
       this.$confirm("是否要进行删除操作?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
       }).then(() => {
-        deleteHerb(row.id).then((response) => {
+        deleteYield(row.id).then((response) => {
           this.$message({
             message: "删除成功",
             type: "success",

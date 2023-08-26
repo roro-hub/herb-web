@@ -8,6 +8,14 @@ export function fetchList(params) {
   })
 }
 
+export function fetchHerbList(params) {
+  return request({
+    url: '/herb/list',
+    method: 'post',
+    params: params
+  })
+}
+
 export function deleteHerb(id) {
   return request({
     url: '/herb/' + id,

@@ -1,14 +1,12 @@
 <template> 
-  <herb-detail :is-edit='true'></herb-detail>
+  <yield-detail :is-edit='true'></yield-detail>
 </template>
 <script>
-  import HerbDetail from './components/HerbDetail'
+  import YieldDetail from './components/YieldDetail'
   export default {
-    name: 'updateHerb',
-    components: { HerbDetail }
+    name: 'updateYield',
+    components: { YieldDetail }
   }
 </script>
 <style>
 </style>
-
-

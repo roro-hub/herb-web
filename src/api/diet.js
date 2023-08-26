@@ -8,14 +8,14 @@ export function fetchList(params) {
   })
 }
 
-export function deleteProcessing(id) {
+export function deleteDiet(id) {
   return request({
     url: '/processing/' + id,
     method: 'delete'
   })
 }
 
-export function createProcessing(data) {
+export function createDiet(data) {
   return request({
     url: '/processing',
     method: 'post',
@@ -23,7 +23,7 @@ export function createProcessing(data) {
   })
 }
 
-export function updateProcessing(data) {
+export function updateDiet(data) {
   return request({
     url: '/processing',
     method: 'put',
@@ -31,7 +31,7 @@ export function updateProcessing(data) {
   })
 }
 
-export function getProcessingDetail(id) {
+export function getDietDetail(id) {
   return request({
     url:'/processing/'+id,
     method:'get'

@@ -28,16 +28,12 @@
           size="small"
           label-width="140px"
         >
-          <el-form-item label="药材名称：" prop="herb">
-            <el-select v-model="listQuery.herbId" placeholder="请选择药材">
-              <el-option
-                v-for="item in selectHerbList"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id"
-              >
-              </el-option>
-            </el-select>
+          <el-form-item label="药膳名称：">
+            <el-input
+              v-model="listQuery.herbName"
+              class="input-width"
+              placeholder="药膳名称"
+            ></el-input>
           </el-form-item>
         </el-form>
       </div>
@@ -55,7 +51,7 @@
       </el-button>
       <el-button
         class="btn-add"
-        @click="handleAddProcessing()"
+        @click="handleAddDiet()"
         size="mini"
       >
         添加
@@ -70,10 +66,10 @@
         border
       >
         <!-- <el-table-column type="selection" width="60" align="center"></el-table-column> -->
-        <el-table-column label="药材名称" align="center">
+        <el-table-column label="药膳名称" align="center">
           <template slot-scope="scope">{{ scope.row.herbName }}</template>
         </el-table-column>
-        <el-table-column label="加工工艺标题" align="center">
+        <el-table-column label="药膳标题" align="center">
           <template slot-scope="scope">{{ scope.row.name }}</template>
         </el-table-column>
         <el-table-column label="内容" align="center">
@@ -90,13 +86,13 @@
             <p>
               <el-button
                 size="mini"
-                @click="handleUpdateProcessing(scope.$index, scope.row)"
+                @click="handleUpdateDiet(scope.$index, scope.row)"
                 >编辑
               </el-button>
               <el-button
                 size="mini"
                 type="danger"
-                @click="handleDeleteProcessing(scope.$index, scope.row)"
+                @click="handleDeleteDiet(scope.$index, scope.row)"
                 >删除
               </el-button>
             </p>
@@ -120,19 +116,17 @@
   </div>
 </template>
 <script>
-import { fetchList, deleteProcessing } from "@/api/processing";
-import { fetchHerbList } from "@/api/herb";
+import { fetchList, deleteDiet } from "@/api/diet";
 
 const defaultListQuery = {
   pageNum: 1,
   pageSize: 10,
   name: null,
-  herbId: null,
   herbName: null,
-  type: 'processing'
+  type: 'diet'
 };
 export default {
-  name: "infoProcessingList",
+  name: "infoDietList",
   components: {},
   data() {
     return {
@@ -140,22 +134,15 @@ export default {
       listLoading: true,
       list: null,
       total: null,
-      showUpperLevel: false,
-      selectHerbList: []
+      showUpperLevel: false
     };
   },
   created() {
     this.showUpperLevel = this.$route.query.showUpperLevel == 1 ? true : false;
     this.getList();
-    this.getSelectHerbList();
   },
   filters: {},
   methods: {
-    getSelectHerbList() {
-      fetchHerbList({ pageSize: 1000, pageNum: 1 }).then((response) => {
-        this.selectHerbList = response.data.list;
-      });
-    },
     handleResetSearch() {
       this.listQuery = Object.assign({}, defaultListQuery);
     },
@@ -163,8 +150,8 @@ export default {
       this.listQuery.pageNum = 1;
       this.getList();
     },
-    handleAddProcessing() {
-      this.$router.push({ path: "/info/addProcessing" });
+    handleAddDiet() {
+      this.$router.push({ path: "/info/addDiet" });
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
@@ -189,19 +176,19 @@ export default {
     handleShowUpperLevel() {
       this.$router.back();
     },
-    handleUpdateProcessing(index, row) {
+    handleUpdateDiet(index, row) {
       this.$router.push({
-        path: "/info/updateProcessing",
+        path: "/info/updateDiet",
         query: { id: row.id },
       });
     },
-    handleDeleteProcessing(index, row) {
+    handleDeleteDiet(index, row) {
       this.$confirm("是否要进行删除操作?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
       }).then(() => {
-        deleteProcessing(row.id).then((response) => {
+        deleteDiet(row.id).then((response) => {
           this.$message({
             message: "删除成功",
             type: "success",

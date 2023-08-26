@@ -35,6 +35,17 @@
               placeholder="药材名称"
             ></el-input>
           </el-form-item>
+          <el-form-item label="类型：" prop="herbType">
+            <el-select v-model="listQuery.herbType" placeholder="请选择类型">
+              <el-option
+                v-for="item in selectHerbTypeList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
         </el-form>
       </div>
     </el-card>
@@ -116,6 +127,7 @@
 </template>
 <script>
 import { fetchList, deleteHerb } from "@/api/herb";
+import { fetchHerbTypeList } from "@/api/herbType";
 
 const defaultListQuery = {
   pageNum: 1,
@@ -132,14 +144,21 @@ export default {
       list: null,
       total: null,
       showUpperLevel: false,
+      selectHerbTypeList: []
     };
   },
   created() {
     this.showUpperLevel = this.$route.query.showUpperLevel == 1 ? true : false;
     this.getList();
+    this.getSelectHerbTypeList();
   },
   filters: {},
   methods: {
+    getSelectHerbTypeList() {
+      fetchHerbTypeList({ pageSize: 1000, pageNum: 1 }).then((response) => {
+        this.selectHerbTypeList = response.data.list;
+      });
+    },
     handleResetSearch() {
       this.listQuery = Object.assign({}, defaultListQuery);
     },

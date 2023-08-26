@@ -2,13 +2,11 @@
   <sales-detail :is-edit='true'></sales-detail>
 </template>
 <script>
-  import SalesDetail from './components/salesDetail'
+  import SalesDetail from './components/SalesDetail'
   export default {
     name: 'updateSales',
-    components: { salesDetail }
+    components: { SalesDetail }
   }
 </script>
 <style>
 </style>
-
-

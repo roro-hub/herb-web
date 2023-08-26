@@ -1,8 +1,8 @@
 <template>
   <el-card class="form-container" shadow="never">
-    <el-form :model="salesDetail" :rules="rules" ref="salesForm" label-width="120px">
+    <el-form :model="yieldDetail" :rules="rules" ref="yieldForm" label-width="120px">
       <el-form-item label="药材名称：" prop="name">
-        <el-select v-model="salesDetail.herbId" placeholder="请选择药材">
+        <el-select v-model="yieldDetail.herbId" placeholder="请选择药材">
           <el-option
             v-for="item in selectHerbList"
             :key="item.id"
@@ -13,12 +13,12 @@
         </el-select>
       </el-form-item>
       <el-form-item label="销量" prop="quantity">
-        <el-input v-model="salesDetail.quantity"></el-input>
+        <el-input v-model="yieldDetail.quantity"></el-input>
       </el-form-item>
       <el-form-item label="销售时间：" prop="saleTime">
         <el-date-picker
           class="input-width"
-          v-model="salesDetail.recordMonth"
+          v-model="yieldDetail.recordMonth"
           value-format="yyyy-MM"
           type="month"
           placeholder="请选择月份"
@@ -28,8 +28,8 @@
         </el-date-picker>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit('salesForm')">提交</el-button>
-        <el-button v-if="!isEdit" @click="resetForm('salesForm')">重置</el-button>
+        <el-button type="primary" @click="onSubmit('yieldForm')">提交</el-button>
+        <el-button v-if="!isEdit" @click="resetForm('yieldForm')">重置</el-button>
         <el-button @click="back()">返回上一级</el-button>
       </el-form-item>
     </el-form>
@@ -37,19 +37,19 @@
 </template>
 
 <script>
-  import {createSales,updateSales,getSalesDetail} from '@/api/sales';
+  import {createYield,updateYield,getYieldDetail} from '@/api/yield';
   import {fetchList} from "@/api/herb";
 
-  const defaultSalesDetail= {
+  const defaultYieldDetail= {
     id: 0,
     name: null,
     herbId: null,
     quantity: null,
     recordMonth: null,
-    type: 'sales'
+    type: 'yield'
   };
   export default {
-    name: "salesDetail",
+    name: "yieldDetail",
     components: {},
     props: {
       isEdit: {
@@ -59,18 +59,18 @@
     },
     data() {
       return {
-        salesDetail: Object.assign({}, defaultSalesDetail),
+        yieldDetail: Object.assign({}, defaultYieldDetail),
         selectHerbList: [],
         rules: {}
       };
     },
     created() {
       if (this.isEdit) {
-        getSalesDetail(this.$route.query.id).then(response => {
-          this.salesDetail = response.data;
+        getYieldDetail(this.$route.query.id).then(response => {
+          this.yieldDetail = response.data;
         });
       } else {
-        this.salesDetail = Object.assign({}, defaultSalesDetail);
+        this.yieldDetail = Object.assign({}, defaultYieldDetail);
       }
       this.getSelectHerbList();
     },
@@ -90,15 +90,15 @@
               cancelButtonText: '取消',
               type: 'warning'
             }).then(() => {
-              if (this.salesDetail.herbId) {
+              if (this.yieldDetail.herbId) {
                 for (let item of this.selectHerbList) {
-                  if (this.salesDetail.herbId == item['id']) {
-                    this.salesDetail.name = item['name'];
+                  if (this.yieldDetail.herbId == item['id']) {
+                    this.yieldDetail.name = item['name'];
                   }
                 }
               }
               if (this.isEdit) {
-                updateSales(this.salesDetail).then(response => {
+                updateYield(this.yieldDetail).then(response => {
                   this.$message({
                     message: '修改成功',
                     type: 'success',
@@ -107,7 +107,7 @@
                   this.$router.back();
                 });
               } else {
-                createSales(this.salesDetail).then(response => {
+                createYield(this.yieldDetail).then(response => {
                   this.$refs[formName].resetFields();
                   this.resetForm(formName);
                   this.$message({

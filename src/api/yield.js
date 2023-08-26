@@ -1,6 +1,8 @@
+import request from '@/utils/request'
+
 export function fetchList(params) {
   return request({
-    url: '/yield/list',
+    url: '/sales/list',
     method: 'post',
     params: params
   })
@@ -8,14 +10,14 @@ export function fetchList(params) {
 
 export function deleteYield(id) {
   return request({
-    url: '/yield/' + id,
+    url: '/sales/' + id,
     method: 'delete'
   })
 }
 
 export function createYield(data) {
   return request({
-    url: '/yield',
+    url: '/sales',
     method: 'post',
     data: data
   })
@@ -23,7 +25,7 @@ export function createYield(data) {
 
 export function updateYield(data) {
   return request({
-    url: '/yield',
+    url: '/sales',
     method: 'put',
     data: data
   })
@@ -31,7 +33,7 @@ export function updateYield(data) {
 
 export function getYieldDetail(id) {
   return request({
-    url:'/yield/'+id,
+    url:'/sales/'+id,
     method:'get'
   });
 }

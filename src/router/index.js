@@ -129,6 +129,26 @@ export const asyncRouterMap = [
         hidden: true
       },
       {
+        path: 'diet',
+        name: 'diet',
+        component: () => import('@/views/info/diet/index'),
+        meta: {title: '药膳管理', icon: 'product-list'}
+      },
+      {
+        path: 'addDiet',
+        name: 'addDiet',
+        component: () => import('@/views/info/diet/add'),
+        meta: {title: '新增药膳'},
+        hidden: true
+      },
+      {
+        path: 'updateDiet',
+        name: 'updateDiet',
+        component: () => import('@/views/info/diet/update'),
+        meta: {title: '编辑药膳'},
+        hidden: true
+      },
+      {
         path: 'sales',
         name: 'sales',
         component: () => import('@/views/info/sales/index'),
