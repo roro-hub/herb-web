@@ -70,7 +70,7 @@
           <template slot-scope="scope">{{ scope.row.name }}</template>
         </el-table-column>
         <el-table-column label="类型" align="center">
-          <template slot-scope="scope">{{ scope.row.herbTypeName }}</template>
+          <template slot-scope="scope">{{ scope.row.herbType }}</template>
         </el-table-column>
         <el-table-column label="内容" align="center">
           <template slot-scope="scope">{{ scope.row.content }}</template>

@@ -40,19 +40,19 @@ export const asyncRouterMap = [
     component: Layout,
     redirect: '/info/bigscreen',
     name: 'info',
-    meta: {title: '大屏配置管理', icon: 'order'},
+    meta: {title: '基础信息', icon: 'order'},
     children: [
       {
-        path: 'market',
-        name: 'market',
+        path: 'bigscreen',
+        name: 'bigscreen',
         component: () => import('@/views/info/bigscreen/index'),
-        meta: {title: '市场信息', icon: 'product-list'}
+        meta: {title: '大屏配置管理', icon: 'product-list'}
       },
       {
         path: 'manager',
         name: 'manager',
         component: () => import('@/views/info/manager/index'),
-        meta: {title: '市场管理员'}
+        meta: {title: '管理员管理'}
       },
       {
         path: 'addManager',
@@ -72,8 +72,102 @@ export const asyncRouterMap = [
         path: 'herb',
         name: 'herb',
         component: () => import('@/views/info/herb/index'),
-        meta: {title: '中药信息', icon: 'product-list'}
-      }
+        meta: {title: '药草管理', icon: 'product-list'}
+      },
+      {
+        path: 'addHerb',
+        name: 'addHerb',
+        component: () => import('@/views/info/herb/add'),
+        meta: {title: '新增药草'},
+        hidden: true
+      },
+      {
+        path: 'updateHerb',
+        name: 'updateHerb',
+        component: () => import('@/views/info/herb/update'),
+        meta: {title: '编辑药草'},
+        hidden: true
+      },
+      {
+        path: 'herbType',
+        name: 'herbType',
+        component: () => import('@/views/info/herbType/index'),
+        meta: {title: '药草类型管理', icon: 'product-list'}
+      },
+      {
+        path: 'addHerbType',
+        name: 'addHerbType',
+        component: () => import('@/views/info/herbType/add'),
+        meta: {title: '新增药草类型'},
+        hidden: true
+      },
+      {
+        path: 'updateHerbType',
+        name: 'updateHerbType',
+        component: () => import('@/views/info/herbType/update'),
+        meta: {title: '编辑药草类型'},
+        hidden: true
+      },
+      {
+        path: 'processing',
+        name: 'processing',
+        component: () => import('@/views/info/processing/index'),
+        meta: {title: '加工管理', icon: 'product-list'}
+      },
+      {
+        path: 'addProcessing',
+        name: 'addProcessing',
+        component: () => import('@/views/info/processing/add'),
+        meta: {title: '新增加工'},
+        hidden: true
+      },
+      {
+        path: 'updateProcessing',
+        name: 'updateProcessing',
+        component: () => import('@/views/info/processing/update'),
+        meta: {title: '编辑加工'},
+        hidden: true
+      },
+      {
+        path: 'sales',
+        name: 'sales',
+        component: () => import('@/views/info/sales/index'),
+        meta: {title: '销售管理', icon: 'product-list'}
+      },
+      {
+        path: 'addSales',
+        name: 'addSales',
+        component: () => import('@/views/info/sales/add'),
+        meta: {title: '新增销售'},
+        hidden: true
+      },
+      {
+        path: 'updateSales',
+        name: 'updateSales',
+        component: () => import('@/views/info/sales/update'),
+        meta: {title: '编辑销售'},
+        hidden: true
+      },
+      {
+        path: 'yield',
+        name: 'yield',
+        component: () => import('@/views/info/yield/index'),
+        meta: {title: '产量管理', icon: 'product-list'}
+      },
+      {
+        path: 'addYield',
+        name: 'addYield',
+        component: () => import('@/views/info/yield/add'),
+        meta: {title: '新增产量'},
+        hidden: true
+      },
+      {
+        path: 'updateYield',
+        name: 'updateYield',
+        component: () => import('@/views/info/yield/update'),
+        meta: {title: '编辑产量'},
+        hidden: true
+      },
     ]
   },
   {

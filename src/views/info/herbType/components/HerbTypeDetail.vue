@@ -1,34 +1,12 @@
 <template>
   <el-card class="form-container" shadow="never">
-    <el-form :model="herbDetail" :rules="rules" ref="herbForm" label-width="120px">
+    <el-form :model="herbTypeDetail" :rules="rules" ref="herbTypeForm" label-width="120px">
       <el-form-item label="名称：" prop="name">
-        <el-input v-model="herbDetail.name"></el-input>
-      </el-form-item>
-      <el-form-item label="类型：" prop="herbType">
-        <el-select v-model="herbDetail.herbType" placeholder="请选择类型">
-          <el-option
-            v-for="item in selectHerbTypeList"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id"
-          >
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="内容：">
-        <el-input
-          :autosize="{ minRows: 6 }"
-          v-model="herbDetail.content"
-          type="textarea"
-          placeholder="请输入内容"
-        ></el-input>
-      </el-form-item>
-      <el-form-item label="图片：">
-        <single-upload v-model="herbDetail.images"></single-upload>
+        <el-input v-model="herbTypeDetail.name"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit('herbForm')">提交</el-button>
-        <el-button v-if="!isEdit" @click="resetForm('herbForm')">重置</el-button>
+        <el-button type="primary" @click="onSubmit('herbTypeForm')">提交</el-button>
+        <el-button v-if="!isEdit" @click="resetForm('herbTypeForm')">重置</el-button>
         <el-button @click="back()">返回上一级</el-button>
       </el-form-item>
     </el-form>
@@ -36,22 +14,15 @@
 </template>
 
 <script>
-  import {createHerb,updateHerb,getHerbDetail} from '@/api/herb';
-  import {
-    fetchList,
-  } from "@/api/herbType";
+  import {fetchList,createHerbType,updateHerbType,deleteHerbType,getHerbTypeDetail} from '@/api/herbType';
   import SingleUpload from "@/components/Upload/singleUpload";
 
-  const defaultHerbDetail= {
+  const defaultHerbTypeDetail= {
     id: 0,
     name: null,
-    herbType: null,
-    herbTypeName: null,
-    content: null,
-    images: null
   };
   export default {
-    name: "HerbDetail",
+    name: "HerbTypeDetail",
     components: { SingleUpload },
     props: {
       isEdit: {
@@ -61,8 +32,7 @@
     },
     data() {
       return {
-        herbDetail: Object.assign({}, defaultHerbDetail),
-        selectHerbTypeList: [],
+        herbTypeDetail: Object.assign({}, defaultHerbTypeDetail),
         rules: {
           name: [
             {required: true, message: '请输入名称', trigger: 'blur'},
@@ -73,22 +43,16 @@
     },
     created() {
       if (this.isEdit) {
-        getHerbDetail(this.$route.query.id).then(response => {
-          this.herbDetail = response.data;
+        getHerbTypeDetail(this.$route.query.id).then(response => {
+          this.herbTypeDetail = response.data;
         });
       } else {
-        this.herbDetail = Object.assign({}, defaultHerbDetail);
+        this.herbTypeDetail = Object.assign({}, defaultHerbTypeDetail);
       }
-      this.getSelectHerbTypeList();
     },
     computed:{
     },
     methods: {
-      getSelectHerbTypeList() {
-        fetchList({ pageSize: 1000, pageNum: 1 }).then((response) => {
-          this.selectHerbTypeList = response.data.list;
-        });
-      },
       onSubmit(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
@@ -97,15 +61,8 @@
               cancelButtonText: '取消',
               type: 'warning'
             }).then(() => {
-              if (this.herbDetail.herbType) {
-                for (let item of this.selectHerbTypeList) {
-                  if (this.herbDetail.herbType == item['id']) {
-                    this.herbDetail.herbTypeName = item['name'];
-                  }
-                }
-              }
               if (this.isEdit) {
-                updateHerb(this.$route.query.id, this.herbDetail).then(response => {
+                updateHerbType(this.$route.query.id, this.herbTypeDetail).then(response => {
                   this.$message({
                     message: '修改成功',
                     type: 'success',
@@ -114,7 +71,7 @@
                   this.$router.back();
                 });
               } else {
-                createHerb(this.herbDetail).then(response => {
+                createHerbType(this.herbTypeDetail).then(response => {
                   this.$refs[formName].resetFields();
                   this.resetForm(formName);
                   this.$message({

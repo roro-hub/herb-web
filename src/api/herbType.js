@@ -2,38 +2,38 @@ import request from '@/utils/request'
 
 export function fetchList(params) {
   return request({
-    url: '/herb/list',
+    url: '/herbType/list',
     method: 'post',
     params: params
   })
 }
 
-export function deleteHerb(id) {
+export function deleteHerbType(id) {
   return request({
-    url: '/herb/' + id,
+    url: '/herbType/' + id,
     method: 'delete'
   })
 }
 
-export function createHerb(data) {
+export function createHerbType(data) {
   return request({
-    url: '/herb',
+    url: '/herbType',
     method: 'post',
     data: data
   })
 }
 
-export function updateHerb(data) {
+export function updateHerbType(data) {
   return request({
-    url: '/herb',
+    url: '/herbType',
     method: 'put',
     data: data
   })
 }
 
-export function getHerbDetail(id) {
+export function getHerbTypeDetail(id) {
   return request({
-    url:'/herb/'+id,
+    url:'/herbType/'+id,
     method:'get'
   });
 }

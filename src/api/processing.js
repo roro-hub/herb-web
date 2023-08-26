@@ -1,39 +1,37 @@
-import request from '@/utils/request'
-
 export function fetchList(params) {
   return request({
-    url: '/herb/list',
+    url: '/processing/list',
     method: 'post',
     params: params
   })
 }
 
-export function deleteHerb(id) {
+export function deleteProcessing(id) {
   return request({
-    url: '/herb/' + id,
+    url: '/processing/' + id,
     method: 'delete'
   })
 }
 
-export function createHerb(data) {
+export function createProcessing(data) {
   return request({
-    url: '/herb',
+    url: '/processing',
     method: 'post',
     data: data
   })
 }
 
-export function updateHerb(data) {
+export function updateProcessing(data) {
   return request({
-    url: '/herb',
+    url: '/processing',
     method: 'put',
     data: data
   })
 }
 
-export function getHerbDetail(id) {
+export function getProcessingDetail(id) {
   return request({
-    url:'/herb/'+id,
+    url:'/processing/'+id,
     method:'get'
   });
 }

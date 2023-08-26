@@ -7,6 +7,14 @@ export function fetchList(params) {
   })
 }
 
+export function addInfo(data) {
+  return request({
+    url:'/info',
+    method:'post',
+    data:data
+  })
+}
+
 export function updateInfo(data) {
   return request({
     url:'/info',

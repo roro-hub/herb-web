@@ -28,11 +28,11 @@
           size="small"
           label-width="140px"
         >
-          <el-form-item label="名称：">
+          <el-form-item label="药材类型名称：">
             <el-input
               v-model="listQuery.name"
               class="input-width"
-              placeholder="药材名称"
+              placeholder="药材类型名称"
             ></el-input>
           </el-form-item>
         </el-form>
@@ -51,7 +51,7 @@
       </el-button>
       <el-button
         class="btn-add"
-        @click="handleAddHerb()"
+        @click="handleAddHerbType()"
         size="mini"
       >
         添加
@@ -66,32 +66,24 @@
         border
       >
         <!-- <el-table-column type="selection" width="60" align="center"></el-table-column> -->
-        <el-table-column label="名称" width="160" align="center">
+        <el-table-column label="编号" align="center">
+          <template slot-scope="scope">{{ scope.row.id }}</template>
+        </el-table-column>
+        <el-table-column label="名称" align="center">
           <template slot-scope="scope">{{ scope.row.name }}</template>
-        </el-table-column>
-        <el-table-column label="类型" align="center">
-          <template slot-scope="scope">{{ scope.row.herbTypeName }}</template>
-        </el-table-column>
-        <el-table-column label="内容" align="center">
-          <template slot-scope="scope">{{ scope.row.content }}</template>
-        </el-table-column>
-        <el-table-column label="图片" width="100" align="center">
-          <template slot-scope="scope">
-            <img style="height: 80px;width: 80px" :src="scope.row.images">
-          </template>
         </el-table-column>
         <el-table-column label="操作" width="160" align="center">
           <template slot-scope="scope">
             <p>
               <el-button
                 size="mini"
-                @click="handleUpdateHerb(scope.$index, scope.row)"
+                @click="handleUpdateHerbType(scope.$index, scope.row)"
                 >编辑
               </el-button>
               <el-button
                 size="mini"
                 type="danger"
-                @click="handleDeleteHerb(scope.$index, scope.row)"
+                @click="handleDeleteHerbType(scope.$index, scope.row)"
                 >删除
               </el-button>
             </p>
@@ -115,7 +107,7 @@
   </div>
 </template>
 <script>
-import { fetchList, deleteHerb } from "@/api/herb";
+import { fetchList, deleteHerbType } from "@/api/herbType";
 
 const defaultListQuery = {
   pageNum: 1,
@@ -123,7 +115,7 @@ const defaultListQuery = {
   name: null,
 };
 export default {
-  name: "infoHerbList",
+  name: "infoHerbTypeList",
   components: {},
   data() {
     return {
@@ -147,8 +139,8 @@ export default {
       this.listQuery.pageNum = 1;
       this.getList();
     },
-    handleAddHerb() {
-      this.$router.push({ path: "/info/addHerb" });
+    handleAddHerbType() {
+      this.$router.push({ path: "/info/addHerbType" });
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
@@ -173,19 +165,19 @@ export default {
     handleShowUpperLevel() {
       this.$router.back();
     },
-    handleUpdateHerb(index, row) {
+    handleUpdateHerbType(index, row) {
       this.$router.push({
-        path: "/info/updateHerb",
+        path: "/info/updateHerbType",
         query: { id: row.id },
       });
     },
-    handleDeleteHerb(index, row) {
+    handleDeleteHerbType(index, row) {
       this.$confirm("是否要进行删除操作?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
       }).then(() => {
-        deleteHerb(row.id).then((response) => {
+        deleteHerbType(row.id).then((response) => {
           this.$message({
             message: "删除成功",
             type: "success",

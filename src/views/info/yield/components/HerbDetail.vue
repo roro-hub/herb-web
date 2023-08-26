@@ -5,23 +5,10 @@
         <el-input v-model="herbDetail.name"></el-input>
       </el-form-item>
       <el-form-item label="类型：" prop="herbType">
-        <el-select v-model="herbDetail.herbType" placeholder="请选择类型">
-          <el-option
-            v-for="item in selectHerbTypeList"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id"
-          >
-          </el-option>
-        </el-select>
+        <el-input v-model="herbDetail.herbType"></el-input>
       </el-form-item>
       <el-form-item label="内容：">
-        <el-input
-          :autosize="{ minRows: 6 }"
-          v-model="herbDetail.content"
-          type="textarea"
-          placeholder="请输入内容"
-        ></el-input>
+        <el-input v-model="herbDetail.content"></el-input>
       </el-form-item>
       <el-form-item label="图片：">
         <single-upload v-model="herbDetail.images"></single-upload>
@@ -36,17 +23,13 @@
 </template>
 
 <script>
-  import {createHerb,updateHerb,getHerbDetail} from '@/api/herb';
-  import {
-    fetchList,
-  } from "@/api/herbType";
+  import {fetchList,createHerb,updateHerb,deleteHerb,getHerbDetail} from '@/api/herb';
   import SingleUpload from "@/components/Upload/singleUpload";
 
   const defaultHerbDetail= {
     id: 0,
     name: null,
     herbType: null,
-    herbTypeName: null,
     content: null,
     images: null
   };
@@ -62,7 +45,6 @@
     data() {
       return {
         herbDetail: Object.assign({}, defaultHerbDetail),
-        selectHerbTypeList: [],
         rules: {
           name: [
             {required: true, message: '请输入名称', trigger: 'blur'},
@@ -79,16 +61,10 @@
       } else {
         this.herbDetail = Object.assign({}, defaultHerbDetail);
       }
-      this.getSelectHerbTypeList();
     },
     computed:{
     },
     methods: {
-      getSelectHerbTypeList() {
-        fetchList({ pageSize: 1000, pageNum: 1 }).then((response) => {
-          this.selectHerbTypeList = response.data.list;
-        });
-      },
       onSubmit(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
@@ -97,13 +73,6 @@
               cancelButtonText: '取消',
               type: 'warning'
             }).then(() => {
-              if (this.herbDetail.herbType) {
-                for (let item of this.selectHerbTypeList) {
-                  if (this.herbDetail.herbType == item['id']) {
-                    this.herbDetail.herbTypeName = item['name'];
-                  }
-                }
-              }
               if (this.isEdit) {
                 updateHerb(this.$route.query.id, this.herbDetail).then(response => {
                   this.$message({
