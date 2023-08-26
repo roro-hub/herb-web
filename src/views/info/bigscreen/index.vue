@@ -300,7 +300,7 @@ export default {
       },
     )},
     handleViewOpeningPage(index, row) {
-      let url = "/#/opening/bigscreenMap";
+      let url = "/#/opening/herb";
       window.open(url, "_blank");
     },
     handleUpdateInfo() {

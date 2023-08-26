@@ -1,0 +1,177 @@
+<template>
+  <div id="herb-processing-card">
+    <div class="card-title">
+        {{ HerbProcessingTitle }}
+        <div class="card-button">
+          <div class="card-title-item">加工工艺</div>
+          <div class="card-title-item">加工车间</div>
+        </div>
+    </div>
+    <div class="card-content">
+      <div class="herb">
+        <div class="herb-item-selected">
+          白术
+        </div>
+        <div class="herb-item">
+          玄参
+        </div>
+        <div class="herb-item">
+          贝母
+        </div>
+        <div class="herb-item">
+          元胡
+        </div>
+        <div class="herb-item">
+          覆盆子
+        </div>
+        <div class="herb-item">
+          玉竹
+        </div>
+      </div>
+      <div class="herb-processing">
+        <div class="image-item">
+            <img class="image" :src="image1 ? image1 : require('../../../../assets/herb_images/药材加工.png')" />
+            <div class="image-bottom">{{ processingName1 }}</div>
+        </div>
+        <div class="image-item">
+            <img class="image" :src="image2 ? image2 : require('../../../../assets/herb_images/药材加工.png')" />
+            <div class="image-bottom">{{ processingName2 }}</div>
+        </div>
+        <div class="image-item">
+            <img class="image" :src="image3 ? image3 : require('../../../../assets/herb_images/药材加工.png')" />
+            <div class="image-bottom">{{ processingName3 }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+  
+<script>
+  export default {
+    name: "HerbProcessingCard",
+    props: {
+      HerbProcessingTitle: {
+        type: String,
+        default: "中药加工",
+      },
+    },
+    watch: {
+    },
+    data() {
+      return {
+        image1: null,
+        image2: null,
+        image3: null,
+        processingName1: '工艺环节1',
+        processingName2: '工艺环节2',
+        processingName3: '工艺环节3',
+      };
+    },
+    created() {
+    },
+    methods: {
+    },
+  };
+</script>
+  
+<style lang="less">
+  #herb-processing-card {
+    position: relative;
+    padding: 0;
+    box-sizing: border-box;
+    width: 100%;
+    .card-title {
+      height: 40px;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      background-image: url(../../../../assets/herb_images/标题@3x.png);
+      background-size: 100% 100%;
+      padding-left: 50px;
+      font-weight: 700;
+      .card-button {
+        display: flex;
+        justify-content: flex-end;
+        width: 80%;
+        .card-title-item {
+          margin-right: 10px;
+          width: 100px;
+          height: 30px;
+          background-image: url(../../../../assets/herb_images/加工矩形.png);
+          background-size: 100% 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+      }
+    }
+  
+    .card-content {
+      margin: 10px 0 10px 10px;
+      padding-bottom: 10px;
+      height: calc(~"100% - 50px");
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-around;
+      background-image: url(../../../../assets/herb_images/矩形@3x.png);
+      background-size: 100% 100%;
+      .herb {
+        height: 30%;
+        width: 100%;
+        display: flex;
+        // flex-wrap: wrap;
+        // justify-content: space-evenly;
+        .herb-item{
+          width: 30%;
+          height: 90%;
+          background-image: url(../../../../assets/herb_images/药材.png);
+          background-size: 100% 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-weight: 700;
+        }
+        .herb-item-selected {
+          width: 30%;
+          height: 90%;
+          background-image: url(../../../../assets/herb_images/药材选中.png);
+          background-size: 100% 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-weight: 700;
+        }
+      }
+      .herb-processing {
+        height: 65%;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        .image-item {
+            width: 32%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            .image {
+                height: 100%;
+                border: 2px solid #44B5EA;
+            }
+            .image-bottom {
+                background-image: url(../../../../assets/herb_images/矩形@2x.png);
+                background-size: 100% 100%;
+                height: 25px;
+                position: absolute;
+                width: 100%;
+                bottom: 0;
+                color: #A2CDFF;
+                justify-content: center;
+                align-items: center;
+                display: flex;
+            }
+        }
+      }
+    }
+  }
+  </style>
+  
