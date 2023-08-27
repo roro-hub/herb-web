@@ -4,32 +4,12 @@
         {{ managerTitle }}
     </div>
     <div class="card-content">
-      <div class="manager-item">
-        <img class="image" :src="image1 ? image1 : require('../../../../assets/herb_images/位图@3x.png')"/>
+      <div v-for="item of managerList" :key="item"
+        class="manager-item">
+        <img class="image" :src="item.image ? item.image : require('../../../../assets/herb_images/位图@3x.png')"/>
         <div class="manager-info">
-          <div class="manager-info-item">张杰</div>
-          <div class="manager-info-item">1111111111</div>
-        </div>
-      </div>
-      <div class="manager-item">
-        <img class="image" :src="image1 ? image1 : require('../../../../assets/herb_images/位图@3x.png')"/>
-        <div class="manager-info">
-          <div class="manager-info-item">张杰</div>
-          <div class="manager-info-item">1111111111</div>
-        </div>
-      </div>
-      <div class="manager-item">
-        <img class="image" :src="image1 ? image1 : require('../../../../assets/herb_images/位图@3x.png')"/>
-        <div class="manager-info">
-          <div class="manager-info-item">张杰</div>
-          <div class="manager-info-item">1111111111</div>
-        </div>
-      </div>
-      <div class="manager-item">
-        <img class="image" :src="image1 ? image1 : require('../../../../assets/herb_images/位图@3x.png')"/>
-        <div class="manager-info">
-          <div class="manager-info-item">张杰</div>
-          <div class="manager-info-item">1111111111</div>
+          <div class="manager-info-item">{{ item.name }}</div>
+          <div class="manager-info-item">{{ item.phone }}</div>
         </div>
       </div>
     </div>
@@ -37,6 +17,13 @@
 </template>
   
 <script>
+  import { fetchList } from "@/api/manager";
+
+  const defaultListQuery = {
+    pageNum: 1,
+    pageSize: 4,
+    name: null,
+  };
   export default {
     name: "ManagerCard",
     props: {
@@ -49,14 +36,41 @@
     },
     data() {
       return {
-        image1: null,
-        managerList: [],
+        listQuery: Object.assign({}, defaultListQuery),
+        managerList: [{
+          'id': 1,
+          'name': '管理员',
+          'phone': '11111111111',
+          'image': null,
+        }, {
+          'id': 2,
+          'name': '管理员',
+          'phone': '11111111111',
+          'image': null,
+        }, {
+          'id': 3,
+          'name': '管理员',
+          'phone': '11111111111',
+          'image': null,
+        }, {
+          'id': 4,
+          'name': '管理员',
+          'phone': '11111111111',
+          'image': null,
+        }],
       };
     },
     created() {
-
+      this.getList();
     },
     methods: {
+      getList() {
+        fetchList(this.listQuery).then((response) => {
+          if (response.data.list && response.data.list.length > 0) {
+            this.managerList = response.data.list;
+          } 
+        });
+      },
     },
   };
 </script>

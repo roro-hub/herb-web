@@ -60,6 +60,30 @@
       };
     },
     created() {
+      if (this.cottageImages) {
+        let cottageImageList = this.cottageImages.split(',');
+        this.image1 = cottageImageList[0];
+        if (cottageImageList.length > 1) {
+          this.image2 = cottageImageList[1];
+        } 
+        if (cottageImageList.length > 2) {
+          this.image3 = cottageImageList[2];
+        } 
+      }
+    },
+    watch:{
+      cottageImages(val, valOld) {
+        if (this.cottageImages) {
+          let cottageImageList = this.cottageImages.split(',');
+          this.image1 = cottageImageList[0];
+          if (cottageImageList.length > 1) {
+            this.image2 = cottageImageList[1];
+          } 
+          if (cottageImageList.length > 2) {
+            this.image3 = cottageImageList[2];
+          } 
+        }
+      },
     },
     methods: {
     },
@@ -89,8 +113,8 @@
       height: calc(~"100% - 50px");
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: space-around;
+      // align-items: center;
+      // justify-content: space-around;
       background-image: url(../../../../assets/herb_images/矩形@3x.png);
       background-size: 100% 100%;
       .market-content {
@@ -106,6 +130,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        margin: auto;
       }
       .cottage-content {
         height: 27%;
@@ -117,6 +142,7 @@
         width: 100%;
         display: flex;
         justify-content: space-between;
+        padding: 0 20px;
         .image-item {
             width: 32%;
             display: flex;

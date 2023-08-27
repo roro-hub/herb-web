@@ -36,10 +36,10 @@
         </div>
       </div>
       <div class="soil">
-        <img class="image" :src="require('../../../../assets/herb_images/土壤.png')" />
+        <img class="image" :src="soilImage ? soilImage : require('../../../../assets/herb_images/土壤.png')" />
         <div class="soil-info">
-          <div class="soil-title">XXX介绍</div>
-          <div class="soil-content">XXX介绍XXX介绍XXX介绍XXX介绍XXX介绍XXX介绍XXX介绍</div>
+          <div class="soil-title">{{ soilName }}</div>
+          <div class="soil-content">{{ soilContent }}</div>
         </div>
       </div>
     </div>
@@ -53,6 +53,18 @@
       baseEnvironmentTitle: {
         type: String,
         default: "基地环境",
+      },
+      soilName: {
+        type: String,
+        default: "土壤介绍",
+      },
+      soilContent: {
+        type: String,
+        default: "土壤介绍内容",
+      },
+      soilImage: {
+        type: String,
+        default: null,
       },
     },
     watch: {

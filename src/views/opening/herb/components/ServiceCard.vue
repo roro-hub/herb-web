@@ -5,13 +5,13 @@
     </div>
     <div class="card-content">
       <div class="service-item">
-        <div class="service-title">{{ serviceTitle1 }}</div>
-        <div class="service-content">{{ serviceContent1 }}</div>
+        <div class="service-title">{{ serviceBugerTitle }}</div>
+        <div class="service-content">{{ serviceBugerContent }}</div>
         <img class="image" :src="require('../../../../assets/herb_images/承诺书@3x.png')" />
       </div>
       <div class="service-item">
-        <div class="service-title">{{ serviceTitle2 }}</div>
-        <div class="service-content">{{ serviceContent2 }}</div>
+        <div class="service-title">{{ serviceSellerTitle }}</div>
+        <div class="service-content">{{ serviceSellerContent }}</div>
         <img class="image" :src="require('../../../../assets/herb_images/承诺书@3x.png')" />
       </div>
     </div>
@@ -26,19 +26,30 @@
         type: String,
         default: "服务清单",
       },
+      serviceBugerTitle: {
+        type: String,
+        default: "买家承诺",
+      },
+      serviceBugerContent: {
+        type: String,
+        default: "买家承诺内容",
+      },
+      serviceSellerTitle: {
+        type: String,
+        default: "卖家承诺",
+      },
+      serviceSellerContent: {
+        type: String,
+        default: "卖家承诺内容",
+      },
     },
     watch: {
     },
     data() {
       return {
-        serviceTitle1: '买家承诺',
-        serviceContent1: '买家承诺买家承诺买家承诺买家承诺买家承诺买家承诺买家承诺买家承诺买家承诺',
-        serviceTitle2: '卖家承诺',
-        serviceContent2: '卖家承诺卖家承诺卖家承诺卖家承诺卖家承诺卖家承诺卖家承诺卖家承诺卖家承诺',
       };
     },
     created() {
-
     },
     methods: {
     },

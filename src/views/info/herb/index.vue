@@ -70,7 +70,7 @@
     </el-card>
     <div class="table-container">
       <el-table
-        ref="infoEquipmentCateable"
+        ref="herbTable"
         :data="list"
         style="width: 100%"
         v-loading="listLoading"

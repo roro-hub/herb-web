@@ -51,21 +51,21 @@
       <div class="item">
         <img class="image" :src="require('../../../../assets/herb_images/产量@3x.png')"/>
         <div class="num-info">
-          <div class="num">300.00</div>
+          <div class="num">{{ yieldValue }}</div>
           <div class="unit">产量<span>(万斤)</span></div>
         </div>
       </div>
       <div class="item">
         <img class="image" :src="require('../../../../assets/herb_images/面积@3x.png')"/>
         <div class="num-info">
-          <div class="num">12000</div>
+          <div class="num">{{ areaValue }}</div>
           <div class="unit">面积<span>(亩)</span></div>
         </div>
       </div>
       <div class="item">
         <img class="image" :src="require('../../../../assets/herb_images/产值@3x.png')"/>
         <div class="num-info">
-          <div class="num">10</div>
+          <div class="num">{{ outputValue }}</div>
           <div class="unit">产值<span>(万元)</span></div>
         </div>
       </div>
@@ -127,6 +127,20 @@ const defaultPolygon = {
 
 export default {
   name: "CenterMap",
+  props: {
+    yieldValue: {
+      type: String,
+      default: "0",
+    },
+    areaValue: {
+      type: String,
+      default: "0",
+    },
+    outputValue: {
+      type: String,
+      default: "0",
+    },
+  },
   components: {},
   data() {
     return {
@@ -172,11 +186,6 @@ export default {
   },
   created() {
     this.getList();
-    this.getWeather();
-    this.getProductCategoryStats(null);
-    this.getDeviceNum(null);
-    this.getTodayNum(null);
-    this.getInspectionList(null);
   },
   filters: {
     formatInspectionTime(time) {
@@ -221,58 +230,6 @@ export default {
   },
   methods: {
     getList() {
-      if (this.enterpriseId == -1 && this.listQuery.enterpriseId == null) {
-        getEnterpriseList(this.listQuery).then((response) => {
-          let list = response.data.list;
-          for (let i = 0; i < list.length; i++) {
-            let positionList = list[i]["fisheryPosition"].split(",");
-            list[i]["positionList"] = [];
-            for (let j = 0; j < positionList.length; j++) {
-              list[i]["positionList"].push(parseFloat(positionList[j]));
-            }
-          }
-          if (list.length > 0) {
-            this.center = list[0]["positionList"];
-          }
-          this.enterpriseList = list;
-          console.log(this.enterpriseList);
-          this.getBlockList();
-        });
-      } else {
-        let enterpriseId = this.enterpriseId;
-        if (enterpriseId == -1) {
-          enterpriseId = this.listQuery.enterpriseId;
-        }
-        getEnterpriseDetail(enterpriseId).then((response) => {
-          let data = response.data;
-          let positionList = data["fisheryPosition"].split(",");
-          data["positionList"] = [];
-          for (let j = 0; j < positionList.length; j++) {
-            data["positionList"].push(parseFloat(positionList[j]));
-          }
-          this.center = data["positionList"];
-          this.enterpriseList = [data];
-          this.getBlockList();
-        });
-      }
-    },
-    getBlockList() {
-      fetchList(this.listQuery).then((response) => {
-        this.blockList = response.data.list;
-        let polygonList = [];
-        for (let item of this.blockList) {
-          let polygon = Object.assign({}, defaultPolygon);
-          polygon.id = item.id;
-          polygon.index = "old_" + item.id;
-          polygon.blockName = item.name;
-          polygon.blockDescription = item.description;
-          polygon.blockArea = item.area;
-          polygon.path = item.positionJson;
-          polygonList.push(polygon);
-        }
-        this.polygonList = polygonList;
-        this.fitView();
-      });
     },
     async fitView() {
       await this.$nextTick();
@@ -328,90 +285,6 @@ export default {
         ? document.msExiFullscreen()
         : document.webkitCancelFullScreen && document.webkitCancelFullScreen(),
         (this.isFull = false);
-    },
-    getWeather() {
-      getLiveWeather(this.cityCode).then((response) => {
-        if (response.status == 200) {
-          let data = response.data;
-          if ("lives" in data) {
-            this.todayTemp = data.lives[0].temperature;
-            this.todayWeather = data.lives[0].weather;
-            this.todayHumidity = data.lives[0].humidity;
-          }
-        }
-      });
-      getForecastWeather(this.cityCode).then((response) => {
-        if (response.status == 200) {
-          let data = response.data;
-          if ("forecasts" in data) {
-            this.tomorrowWeather = data.forecasts[0].casts[1].dayweather;
-            this.tomorrowDaytemp = data.forecasts[0].casts[1].daytemp;
-            this.tomorrowNighttemp = data.forecasts[0].casts[1].nighttemp;
-            this.afterTomorrowWeather = data.forecasts[0].casts[2].dayweather;
-            this.afterTomorrowDaytemp = data.forecasts[0].casts[2].daytemp;
-            this.afterTomorrowNighttemp = data.forecasts[0].casts[2].nighttemp;
-          }
-        }
-      });
-    },
-    getProductCategoryStats(blockId) {
-      getProductCategoryList(blockId).then((response) => {
-        let productCategoryNum = 0;
-        let batchNum = 0;
-        for (let item of response.data) {
-          productCategoryNum += 1;
-          batchNum += item["batchCount"];
-        }
-        this.productCategoryNum = productCategoryNum;
-        this.batchNum = batchNum;
-      });
-    },
-    getDeviceNum(blockId) {
-      let query = {
-        pageNum: 1,
-        pageSize: 100000,
-        blockId: blockId,
-      };
-      getDeviceList(query).then((response) => {
-        this.deviceNum = response.data.total;
-      });
-    },
-    getTodayNum(blockId) {
-      let query = {
-        pageNum: 1,
-        pageSize: 100000,
-        blockId: blockId,
-        farmTime: formatDate(new Date(), "yyyy-MM-dd") + " 00:00:00",
-      };
-      getBatchList(query).then((response) => {
-        this.todayBatchNum = response.data.total;
-        let fishList = [];
-        for (let item of response.data.list) {
-          if (fishList.indexOf(item.productCategoryName)) {
-            fishList.push(item.productCategoryName);
-          }
-        }
-        this.todayFishNum = fishList.length;
-      });
-    },
-    getInspectionList(blockId) {
-      let query = {
-        pageNum: 1,
-        pageSize: 5,
-        blockId: blockId,
-        startTime:
-          formatDate(
-            new Date(new Date().getTime() - 3600 * 1000 * 24 * 5),
-            "yyyy-MM-dd"
-          ) + " 00:00:00",
-        endTime: formatDate(new Date(), "yyyy-MM-dd") + " 23:59:59",
-      };
-      getInspectionList(query).then((response) => {
-        this.inspectionList = response.data.list;
-      });
-    },
-    changeBlockSelected(block) {
-      this.$emit("changeBlockSelected", block);
     },
   },
 };

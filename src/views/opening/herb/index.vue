@@ -5,26 +5,45 @@
       <div class="main-content">
         <div class="block-left-content">
           <div class="left-1">
-            <market-card></market-card>
+            <market-card 
+              :marketContent="bigscreenDetail.configDataJson.marketContent"
+              :cottageName="bigscreenDetail.configDataJson.cottageName"
+              :cottageContent="bigscreenDetail.configDataJson.cottageContent"
+              :cottageImages="bigscreenDetail.configDataJson.cottageImages"
+            >
+            </market-card>
           </div>
           <div class="left-2">
             <manager-card></manager-card>
           </div>
           <div class="left-3">
-            <service-card></service-card>
+            <service-card
+              :serviceBugerContent="bigscreenDetail.configDataJson.serviceBuyer"
+              :serviceSellerContent="bigscreenDetail.configDataJson.serviceSeller"
+            ></service-card>
           </div>
         </div>
         <div class="block-main-content">
           <div class="main-1">
-            <center-map @changeBlockSelected="changeBlockSelected"></center-map>
+            <center-map 
+              :yieldValue = "bigscreenDetail.configDataJson.yield"
+              :areaValue = "bigscreenDetail.configDataJson.area"
+              :outputValue = "bigscreenDetail.configDataJson.output"
+              @changeBlockSelected="changeBlockSelected">
+            </center-map>
           </div>
           <div class="main-2">
-            <center-bottom :images="bigscreenDetail.configDataJson.centerBottomImages"></center-bottom>
+            <center-bottom></center-bottom>
           </div>
         </div>
         <div class="block-right-content">
           <div class="right-1">
-            <base-environment-card></base-environment-card>
+            <base-environment-card 
+              :soilName="bigscreenDetail.configDataJson.soilName"
+              :soilContent="bigscreenDetail.configDataJson.soilContent"
+              :soilImage="bigscreenDetail.configDataJson.soilImage"
+            >
+            </base-environment-card>
           </div>
           <div class="right-2">
             <base-monitor-card></base-monitor-card>
@@ -55,10 +74,9 @@ import HerbIntroduceCard from "./components/HerbIntroduceCard";
 import HerbProcessingCard from "./components/HerbProcessingCard";
 
 const defaultListQuery = {
-  pageNum: 1,
-  pageSize: 1,
-  name: null,
+  types: null
 };
+const TYPES = "market,soil,serve_list_buyer,serve_list_seller,cottage,yield,area,output";
 export default {
   name: "bigscreenMap",
   components: {
@@ -80,17 +98,19 @@ export default {
       bigscreenDetail: {
         name: "bigscreenMap",
         configDataJson: {
-          mainTitle: "",
-          leftTitle2: "",
-          leftTitle3: "",
-          leftTitle4: "",
-          rightTitle1: "",
-          rightTitle2: "",
-          rightTitle3: "",
-          rightTitle4: "",
-          rightTable4: [],
-          centerBottomImages: "",
-        },
+          yield: "0",
+          area: "0",
+          output: "0",
+          marketContent: null,
+          cottageName: null,
+          cottageContent: null,
+          cottageImages: null,
+          serviceBuyer: null,
+          serviceSeller: null,
+          soilName: null,
+          soilContent: null,
+          soilImage: null,
+        }
       },
     };
   },
@@ -100,13 +120,36 @@ export default {
   methods: {
     getList() {
       this.listLoading = true;
-      this.listQuery.name = "bigscreenMap";
+      this.listQuery.types = TYPES;
       fetchList(this.listQuery).then((response) => {
         this.listLoading = false;
-        let list = response.data.list;
-        if (list.length > 0) {
-          this.bigscreenDetail = list[0];
-          console.log(this.bigscreenDetail)
+        let list = response.data;
+        let that = this;
+        for (let i in list) {
+          if (list[i].type == "market") {
+            that.bigscreenDetail.configDataJson.marketContent = list[i].content;
+          } else if (list[i].type == "cottage") {
+            that.bigscreenDetail.configDataJson.cottageName = list[i].name;
+            that.bigscreenDetail.configDataJson.cottageContent = list[i].content;
+            that.bigscreenDetail.configDataJson.cottageImages = list[i].images;
+            if (list[i].images) {
+              that.cottageImageList = list[i].images.split(",");
+            }
+          } else if (list[i].type == "serve_list_buyer") {
+            that.bigscreenDetail.configDataJson.serviceBuyer = list[i].content;
+          } else if (list[i].type == "serve_list_seller") {
+            that.bigscreenDetail.configDataJson.serviceSeller = list[i].content;
+          } else if (list[i].type == "soil") {
+            that.bigscreenDetail.configDataJson.soilName = list[i].name;
+            that.bigscreenDetail.configDataJson.soilContent = list[i].content;
+            that.bigscreenDetail.configDataJson.soilImage = list[i].images;
+          } else if (list[i].type == "yield") {
+            that.bigscreenDetail.configDataJson.yield = list[i].content;
+          } else if (list[i].type == "area") {
+            that.bigscreenDetail.configDataJson.area = list[i].content;
+          } else if (list[i].type == "output") {
+            that.bigscreenDetail.configDataJson.output = list[i].content;
+          }
         }
       });
     },

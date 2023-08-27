@@ -4,7 +4,7 @@
         {{ HerbProcessingTitle }}
         <div class="card-button">
           <div class="card-title-item">加工工艺</div>
-          <div class="card-title-item">加工车间</div>
+          <div class="card-title-item" @click="handleViewProcessingWorkshop()">加工车间</div>
         </div>
     </div>
     <div class="card-content">
@@ -43,6 +43,24 @@
         </div>
       </div>
     </div>
+    <el-dialog
+      class="processing-workshop-dialog" 
+      :title="'加工车间'"
+      :visible.sync="dialogVisible"
+      width="823px" height="365px" append-to-body>
+      <div class="workshop-monitor">
+        <div class="image-item">
+          <img class="image" :src="image4 ? image4 : require('../../../../assets/herb_images/中药加工车间.png')" />
+          <div class="image-bottom">{{ imageName }}</div>
+        </div>
+      </div>
+      <div class="workshop-monitor">
+        <div class="image-item">
+          <img class="image" :src="image4 ? image4 : require('../../../../assets/herb_images/中药加工车间.png')" />
+          <div class="image-bottom">{{ imageName }}</div>
+        </div>
+      </div>
+    </el-dialog>
   </div>
 </template>
   
@@ -62,14 +80,20 @@
         image1: null,
         image2: null,
         image3: null,
+        image4: null,
         processingName1: '工艺环节1',
         processingName2: '工艺环节2',
         processingName3: '工艺环节3',
+        dialogVisible: false,
+        imageName: '加工车间',
       };
     },
     created() {
     },
     methods: {
+      handleViewProcessingWorkshop() {
+        this.dialogVisible = true;
+      }
     },
   };
 </script>
@@ -94,7 +118,7 @@
         justify-content: flex-end;
         width: 80%;
         .card-title-item {
-          margin-right: 10px;
+          margin-left: 20px;
           width: 100px;
           height: 30px;
           background-image: url(../../../../assets/herb_images/加工矩形.png);
@@ -169,6 +193,59 @@
                 align-items: center;
                 display: flex;
             }
+        }
+      }
+    }
+  }
+
+  .processing-workshop-dialog {
+    .el-dialog {
+      background: #000;
+      background-image: url('../../../../assets/herb_images/加工车间弹框背景.png');
+      background-size: 100% 100%;
+      // height: 80%;
+    }
+    .el-dialog__title {
+      color: #fff;
+    }
+
+    .el-dialog__body {
+      height: 330px;
+      padding: 30px 20px 20px 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .workshop-monitor {
+        width: 350px;
+        height: 258px;
+        margin: 0 20px;
+        background-image: url(../../../../assets/herb_images/加工车间框.png);
+        background-size: 100% 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 44px 30px 16px 30px;
+        .image-item {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          position: relative;
+          .image {
+              height: 100%;
+              border: 2px solid #44B5EA;
+          }
+          .image-bottom {
+              background-image: url(../../../../assets/herb_images/矩形@2x.png);
+              background-size: 100% 100%;
+              height: 30px;
+              position: absolute;
+              width: 100%;
+              bottom: 0;
+              color: #A2CDFF;
+              justify-content: center;
+              align-items: center;
+              display: flex;
+          }
         }
       }
     }

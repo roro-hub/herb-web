@@ -170,6 +170,7 @@ const defaultListQuery = {
   pageNum: 1,
   pageSize: 1,
   name: null,
+  types: null,
 };
 const TYPES = "market,soil,serve_list_buyer,serve_list_seller,cottage,yield,area,output";
 export default {
