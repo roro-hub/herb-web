@@ -53,6 +53,32 @@ export const asyncRouterMap = [
         meta: {title: '大屏配置管理', icon: 'product-list'}
       },
       {
+        path: 'mapPoint',
+        name: 'mapPoint',
+        component: () => import('@/views/info/mapPoint/index'),
+        meta: {title: '地图点标记', icon: 'product-list'}
+      },
+      {
+        path: 'addMapPoint',
+        name: 'addMapPoint',
+        component: () => import('@/views/info/mapPoint/add'),
+        meta: {title: '新增地图点标记'},
+        hidden: true
+      },
+      {
+        path: 'updateMapPoint',
+        name: 'updateMapPoint',
+        component: () => import('@/views/info/mapPoint/update'),
+        meta: {title: '编辑地图点标记'},
+        hidden: true
+      },
+      {
+        path: 'mapBlock',
+        name: 'mapBlock',
+        component: () => import('@/views/info/mapBlock/index'),
+        meta: {title: '地图区块标记', icon: 'product-list'}
+      },
+      {
         path: 'manager',
         name: 'manager',
         component: () => import('@/views/info/manager/index'),
