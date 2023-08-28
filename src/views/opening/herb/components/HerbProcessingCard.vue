@@ -9,37 +9,18 @@
     </div>
     <div class="card-content">
       <div class="herb">
-        <div class="herb-item-selected">
-          白术
-        </div>
-        <div class="herb-item">
-          玄参
-        </div>
-        <div class="herb-item">
-          贝母
-        </div>
-        <div class="herb-item">
-          元胡
-        </div>
-        <div class="herb-item">
-          覆盆子
-        </div>
-        <div class="herb-item">
-          玉竹
+        <div v-for="herb of herbList" :key="herb.id"
+          :class="herb.name == herbSelected ? 'herb-item-selected' : 'herb-item'"
+          @click="handleChangeHerb(herb.id, herb.name)">
+          {{ herb.name }}
         </div>
       </div>
       <div class="herb-processing">
-        <div class="image-item">
-            <img class="image" :src="image1 ? image1 : require('../../../../assets/herb_images/药材加工.png')" />
-            <div class="image-bottom">{{ processingName1 }}</div>
-        </div>
-        <div class="image-item">
-            <img class="image" :src="image2 ? image2 : require('../../../../assets/herb_images/药材加工.png')" />
-            <div class="image-bottom">{{ processingName2 }}</div>
-        </div>
-        <div class="image-item">
-            <img class="image" :src="image3 ? image3 : require('../../../../assets/herb_images/药材加工.png')" />
-            <div class="image-bottom">{{ processingName3 }}</div>
+        <div v-for="processing of processingList" :key="processing.id">
+            <div class="image-item">
+              <img class="image" :src="processing.image ? processing.image : require('../../../../assets/herb_images/药材加工.png')" />
+              <div class="image-bottom">{{ processing.name }}</div>
+            </div>
         </div>
       </div>
     </div>
@@ -65,6 +46,9 @@
 </template>
   
 <script>
+import { fetchHerbList } from "@/api/herb";
+import { fetchProcessingList } from "@/api/processing";
+
   export default {
     name: "HerbProcessingCard",
     props: {
@@ -86,13 +70,38 @@
         processingName3: '工艺环节3',
         dialogVisible: false,
         imageName: '加工车间',
+        herbId: null,
+        herbName: null,
+        herbSelected: null,
+        herbList: [],
+        processingList: [],
       };
     },
     created() {
+      this.getHerbList();
     },
     methods: {
       handleViewProcessingWorkshop() {
         this.dialogVisible = true;
+      },
+      getHerbList() {
+        fetchHerbList({ pageSize: 1000, pageNum: 1 }).then((response) => {
+          this.herbList = response.data.list;
+          if (this.herbList.length > 0) {
+            this.herbSelected = this.herbList[0].name;
+          }
+        });
+      },
+      handleChangeHerb(herbId, herbName) {
+        let herbQuery = {
+          'herbId': herbId,
+          'herbName': herbName,
+          'pageNum': 1,
+          'pageSize': 1   
+        }
+        fetchProcessingList(herbQuery).then((response) => {
+          this.processingList = response.data.list;
+        });
       }
     },
   };

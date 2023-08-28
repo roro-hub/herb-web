@@ -72,7 +72,7 @@
               cancelButtonText: '取消',
               type: 'warning'
             }).then(() => {
-              this.mapPointDetail.position = "["+this.mapPointDetail.latitude+","+this.mapPointDetail.longitude+"]";
+              this.mapPointDetail.position = "[["+this.mapPointDetail.longitude+","+this.mapPointDetail.latitude+"]]";
               if (this.isEdit) {
                 updateMapPoint(this.mapPointDetail).then(response => {
                   this.$message({

@@ -32,7 +32,7 @@
             <el-input
               v-model="listQuery.name"
               class="input-width"
-              placeholder="管理员名称"
+              placeholder="地图标记名称"
             ></el-input>
           </el-form-item>
         </el-form>
@@ -65,7 +65,6 @@
         v-loading="listLoading"
         border
       >
-        <!-- <el-table-column type="selection" width="60" align="center"></el-table-column> -->
         <el-table-column label="地图标记名称" width="160" align="center">
           <template slot-scope="scope">{{ scope.row.name }}</template>
         </el-table-column>
@@ -170,6 +169,16 @@ export default {
         this.listLoading = false;
         this.list = response.data.list;
         this.total = response.data.total;
+        for (let i=0; i<response.data.list.length; i++) {
+          debugger
+          let positionList = response.data.list[i]['position'].split(',')
+          if (positionList[0].length > 1) {
+            response.data.list[i]['longitude'] = parseFloat(positionList[0].slice(2, positionList[0].length))
+          }
+          if (positionList.length > 1 && positionList[1].length > 1) {
+            response.data.list[i]['latitude'] = parseFloat(positionList[1].slice(0, positionList[1].length-2))
+          }
+        }
       });
     },
     handleShowUpperLevel() {

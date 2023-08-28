@@ -91,91 +91,6 @@
         </el-button-group>
       </div>
     </div>
-    <div class="info-panel">
-      <div class="side-card">
-        <div class="title">
-          <span v-if="activePolygon === null">区域信息</span>
-          <span v-if="activePolygon">{{ activePolygon.blockName }}</span>
-        </div>
-        <div class="air" v-if="activePolygon === null">
-          <div class="temp">
-            <strong>{{ todayTemp }}</strong
-            >℃
-          </div>
-          <div class="RH d-f ai-c">
-            <span>{{ todayWeather }}</span>
-            相对湿度{{ todayHumidity }}%
-          </div>
-          <div class="future">
-            明天
-            <span>{{ tomorrowWeather }}</span>
-            {{ tomorrowNighttemp }}℃ / {{ tomorrowDaytemp }}℃
-          </div>
-          <div class="future">
-            后天
-            <span>{{ afterTomorrowWeather }}</span>
-            {{ afterTomorrowNighttemp }}℃ / {{ afterTomorrowDaytemp }}℃
-          </div>
-        </div>
-        <div class="device-statistic d-f">
-          <div class="item" v-if="activePolygon === null">
-            <h4>区块数</h4>
-            <div class="num">{{ polygonList.length }}</div>
-          </div>
-          <div class="item" v-if="activePolygon">
-            <h4>面积(亩)</h4>
-            <div class="num">{{ activePolygon.blockArea }}</div>
-          </div>
-          <div class="item">
-            <h4>监测设备</h4>
-            <div class="num">{{ deviceNum }}</div>
-          </div>
-          <div class="item">
-            <h4>养殖鱼类</h4>
-            <div class="num">{{ productCategoryNum }}</div>
-          </div>
-          <div class="item">
-            <h4>投放批次</h4>
-            <div class="num">{{ batchNum }}</div>
-          </div>
-        </div>
-        <div class="state-statistic">
-          <div class="title title-second">今日养殖</div>
-          <div class="device-statistic d-f">
-            <div class="item">
-              <h4>养殖品种</h4>
-              <div class="num">{{ todayFishNum }}</div>
-            </div>
-            <div class="item">
-              <h4>养殖批次</h4>
-              <div class="num">{{ todayBatchNum }}</div>
-            </div>
-          </div>
-        </div>
-        <div class="water-log">
-          <div class="title title-second">区试巡检日志（最近5天）</div>
-          <div class="no-data" v-if="inspectionList.length == 0">暂无数据</div>
-          <div v-if="inspectionList.length > 0" class="inspection-data">
-            <el-table
-              ref="infoInspectionTable"
-              :data="inspectionList"
-              style="width: 100%"
-            >
-              <el-table-column label="品种繁育指标数据" width="140">
-                <template slot-scope="scope">
-                  {{ scope.row.productData | formatProductData }}
-                </template>
-              </el-table-column>
-              <el-table-column label="区试时间">
-                <template slot-scope="scope">
-                  {{ scope.row.inspectionTime | formatInspectionTime }}
-                </template>
-              </el-table-column>
-            </el-table>
-          </div>
-        </div>
-      </div>
-    </div>
     <div class="color-desc">
       <ul class="list" @mouseout="hoverPolygon = null">
         <li
@@ -211,7 +126,7 @@ const defaultListQuery = {
   pageNum: 1,
   pageSize: 100000,
   name: null,
-  enterpriseId: null
+  type: 'block'
 };
 const defaultPolygon = {
   id: null,
@@ -272,12 +187,7 @@ export default {
     };
   },
   created() {
-    this.getList();
-    this.getWeather();
-    this.getProductCategoryStats(null);
-    this.getDeviceNum(null);
-    this.getTodayNum(null);
-    this.getInspectionList(null);
+    this.getBlockList();
   },
   filters: {
     formatInspectionTime(time) {
@@ -319,49 +229,6 @@ export default {
     },
   },
   methods: {
-    getEnterprise(enterprise) {
-      if (enterprise && enterprise.id != -1) {
-        this.listQuery.enterpriseId = enterprise.id
-      } else {
-        this.listQuery.enterpriseId = null
-      }
-      this.getList()
-    },
-    getList() {
-      if (this.enterpriseId == -1 && this.listQuery.enterpriseId == null) {
-        getEnterpriseList(this.listQuery).then((response) => {
-          let list = response.data.list;
-          for (let i=0; i<list.length; i++) {
-            let positionList = list[i]['fisheryPosition'].split(',')
-            list[i]['positionList'] = []
-            for (let j=0; j<positionList.length; j++) {
-              list[i]['positionList'].push(parseFloat(positionList[j]))
-            }
-          }
-          if (list.length > 0) {
-            this.center = list[0]['positionList']
-          }
-          this.enterpriseList = list;
-          this.getBlockList();
-        });
-      } else {
-        let enterpriseId = this.enterpriseId
-        if (enterpriseId == -1) {
-          enterpriseId = this.listQuery.enterpriseId
-        }
-        getEnterpriseDetail(enterpriseId).then((response) => {
-          let data = response.data;
-          let positionList = data['fisheryPosition'].split(',')
-          data['positionList'] = []
-          for (let j=0; j<positionList.length; j++) {
-            data['positionList'].push(parseFloat(positionList[j]))
-          }
-          this.center = data['positionList']
-          this.enterpriseList = [data];
-          this.getBlockList();
-        });
-      }
-    },
     getBlockList() {
       fetchList(this.listQuery).then((response) => {
         this.blockList = response.data.list;
@@ -404,11 +271,7 @@ export default {
       this.editable = true;
     },
     handleUpdateMap() {
-      let url = "/#/opening/iotVisual";
-      if (this.listQuery.enterpriseId) {
-        url = "/#/opening/iotVisual?enterpriseId=" + this.listQuery.enterpriseId;
-      }
-      window.open(url, "_blank");
+      window.open("/#/opening/mapBlock", "_blank");
     },
     fullScreen() {
       if (this.isFull) {

@@ -16,9 +16,9 @@ export function getPriceLatestList(params) {
   })
 }
 
-export function getPriceRankingToday(params) {
+export function getPriceRankingLatest(params) {
   return request({
-    url:'/priceRanking/today',
+    url:'/priceRanking/latest',
     method:'post',
     params:params
   })

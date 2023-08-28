@@ -8,6 +8,14 @@ export function fetchList(params) {
   })
 }
 
+export function fetchProcessingList(params) {
+  return request({
+    url: '/processing/list',
+    method: 'post',
+    params: params
+  })
+}
+
 export function deleteProcessing(id) {
   return request({
     url: '/processing/' + id,

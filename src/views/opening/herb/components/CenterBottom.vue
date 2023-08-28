@@ -229,7 +229,7 @@
   require("echarts/lib/component/legend");
   import { 
     getPriceLatestList,
-    getPriceRankingToday,
+    getPriceRankingLatest,
     getPriceHistory,
     getPriceLatestSite,
     getPriceSite,
@@ -278,6 +278,8 @@
         originSelected: null,
         siteSelected: null,
         siteList: [],
+        herbType: '居六味',
+        priceRecentlyNames: [],
       };
     },
     created() {
@@ -302,7 +304,7 @@
         } else if (this.tableSelected == 'historyPrice') {
           this.getHistoryPrice();
         } else if (this.tableSelected == 'priceRanking') {
-          this.getPriceRankingToday();
+          this.getPriceRankingLatest();
         } 
       },
       getPriceTodayList() {
@@ -311,11 +313,12 @@
           this.listLoading = false;
           this.priceList = response.data.list;
           this.total = response.data.total;
-          if (this.listQuery.pageNum == 1 && this.priceList.size() > 0){
+          if (this.listQuery.pageNum == 1 && this.priceList.length > 0){
             this.nameSelected = this.priceList[0]['name'];
             this.standardSelected = this.priceList[0]['standard'];
             this.originSelected = this.priceList[0]['origin'];
             this.siteSelected = null;
+            this.getPriceSite();
           }
         });
       },
@@ -325,14 +328,17 @@
           'standard': this.standardSelected,
           'origin': this.originSelected,
         }
-        debugger
         getPriceSite(siteQuery).then((response) => {
           this.siteList = response.data;
-          if (this.siteList.size() > 0) {
+          if (this.siteList.length > 0) {
+            // todo 切换不同药材site没有更新，没有取第一个
             this.siteSelected = this.siteList[0];
-            this.getHistoryPrice();
           }
         });
+      },
+      handleChangeSite(site) {
+        this.siteSelected = site;
+        this.getHistoryPrice();
       },
       getHistoryPrice() {
         let historyQuery = {
@@ -347,9 +353,9 @@
           this.getHistoryChart();
         });
       },
-      getPriceRankingToday() {
+      getPriceRankingLatest() {
         this.listLoading = true;
-        getPriceRankingToday(this.listQuery).then((response) => {
+        getPriceRankingLatest(this.listQuery).then((response) => {
           this.listLoading = false;
           this.priceRankingList = response.data.list;
           this.total = response.data.total;
@@ -368,8 +374,10 @@
         this.nameSelected = row['name'];
         this.standardSelected = row['standard'];
         this.originSelected = row['origin'];
-        this.siteSelected = null;
+        this.getPriceSite();
+        setTimeout(3000);
         this.tableSelected = 'historyPrice';
+        this.getHistoryPrice();
       },
       getValue(val) {
         if (val == null) {
@@ -397,6 +405,16 @@
         }
       },
       getPriceEchart() {
+        let priceQuery = {
+          'type': this.herbType,
+          'month': this.month,
+        }
+        getPriceRecently(priceQuery).then((response) => {
+          this.priceRecentlyNames = Object.keys(response.data);
+          getPriceRecentlyEchart();
+        });
+      },
+      getPriceRecentlyEchart() {
         let that = this;
         this.$nextTick(() => {
           let ref = that.$refs["price-chart"];
@@ -746,9 +764,9 @@
                 color:'#A2CDFF' //更改坐标轴颜色
             },
             xAxis: {
-              type: 'value',
+              type: 'category',
               boundaryGap: [0, 0.01],
-              name: '吨',
+              data: Object.keys(this.historyData),
               splitLine: {
                 lineStyle: {
                     color: '#71BDFF'
@@ -756,15 +774,16 @@
               },
             },
             yAxis: {
-              type: 'category',
-              data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
+              type: 'value'
             },
             series: [
               {
-                name: '销量',
-                type: 'bar',
-                barWidth: '40%',
-                data: [183, 489, 294, 100, 144, 630, 122, 234, 232, 421, 245, 398],
+                name: this.todayData.name + '价格',
+                type:'line',
+                smooth: true,
+                areaStyle:{fill: '#f70'},
+                // barWidth: '30%',
+                data: Object.values(this.historyData),
                 label: {
                   show: true,
                   position: 'right',

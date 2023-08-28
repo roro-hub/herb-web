@@ -2,37 +2,30 @@ import request from '@/utils/request'
 export function fetchList(params) {
   return request({
     url:'/mapBlock/list',
-    method:'get',
+    method:'post',
     params:params
   })
 }
 
-export function createMapBlock(data) {
+export function createBlock(data) {
   return request({
-    url:'/mapBlock/create',
+    url:'/mapBlock',
     method:'post',
     data:data
   })
 }
 
-export function updateMapBlock(id, data) {
+export function updateBlock(data) {
   return request({
-    url:'/mapBlock/update/' + id,
-    method:'post',
+    url:'/mapBlock',
+    method:'put',
     data:data
   })
 }
 
-export function deleteMapBlock(id) {
+export function deleteBlock(id) {
   return request({
-    url:'/mapBlock/delete/' + id,
-    method:'post',
+    url:'/mapBlock/' + id,
+    method:'delete',
   })
-}
-
-export function getMapBlockDetail(id) {
-  return request({
-    url:'/mapBlock/'+id,
-    method:'get'
-  });
 }

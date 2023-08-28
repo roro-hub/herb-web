@@ -25,6 +25,10 @@ export const constantRouterMap = [
     component: () => import('@/views/opening/herb/index'),
     hidden: true,
   },
+  {path: '/opening/mapBlock', 
+    component: () => import('@/views/opening/mapBlock/index'),
+    hidden: true,
+  },
   {
     path: '',
     component: Layout,
@@ -63,13 +67,6 @@ export const asyncRouterMap = [
         name: 'addMapPoint',
         component: () => import('@/views/info/mapPoint/add'),
         meta: {title: '新增地图点标记'},
-        hidden: true
-      },
-      {
-        path: 'updateMapPoint',
-        name: 'updateMapPoint',
-        component: () => import('@/views/info/mapPoint/update'),
-        meta: {title: '编辑地图点标记'},
         hidden: true
       },
       {
